@@ -20,9 +20,14 @@ GPIO.setmode(GPIO.BOARD)
 # GPIO pins
 INT1 = 13
 INT2 = 15
+alarm_trigger = 16
 
 # Set GPIO pin directions
 GPIO.setup([INT1, INT2], GPIO.IN)
+    
+    #If we are using negative logic, setting the pin to give 3.3 v means the alarm is off
+    # and setting the pin to give 0 v means alarm is on
+GPIO.setup(alarm_trigger, GPIO.OUT, 1)
 
 # Create device status object
 device_status = DeviceStatus()
@@ -45,5 +50,6 @@ while True:
     
     if (trig_int_count >= trig_int_threshold):
         print('TAMPERING DETECTED')
+        GPIO.output(alarm_trigger, 0)
         trig_int_count = 0
 
